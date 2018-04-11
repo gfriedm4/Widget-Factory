@@ -17,17 +17,19 @@ Clone repository with:
 ```
 git clone https://github.com/Gfriedman21/Widget-Factory.git
 ```
-
-Install composer dependencies by running
-
+Install composer dependencies by running:
 ```
 composer install
 ```
 
-Install node dependencies by running
-
+Install node dependencies by running:
 ```
 yarn
+```
+
+Create database tables by running:
+```
+php artisan migrate
 ```
 
 ## Deployment
@@ -35,6 +37,13 @@ yarn
 Project can be built with yarn. Building process uses webpack in the background.
 ```
 yarn run production
+```
+
+## Database Seeding
+
+Database can be filled with test data using the following command
+```
+php artisan db:seed
 ```
 
 ## Built With
