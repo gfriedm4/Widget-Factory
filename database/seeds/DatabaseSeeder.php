@@ -15,5 +15,7 @@ class DatabaseSeeder extends Seeder
         $this->call(WidgetSizesTableSeeder::class);
         $this->call(WidgetFinishesTableSeeder::class);
         $this->call(WidgetsTableSeeder::class);
+        $this->call(OrdersTableSeeder::class);
+        $this->call(OrderWidgetTableSeeder::class);
     }
 }

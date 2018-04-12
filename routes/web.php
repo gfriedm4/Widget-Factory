@@ -14,14 +14,3 @@
 Route::get('/', function () {
     return view('welcome');
 });
-
-/*
- * GET	    /widgets	            index	widgets.index
- * GET	    /widgets/create	        create	widgets.create
- * POST	    /widgets	            store	widgets.store
- * GET	    /widgets/{widget}	    show	widgets.show
- * GET	    /widgets/{widget}/edit	edit	widgets.edit
- * PUT	    /widgets/{widget}	    update	widgets.update
- * DELETE	/widgets/{widget}	    destroy	widgets.destroy
- */
-Route::resource('widgets', 'WidgetController');

@@ -16,3 +16,17 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+/*
+ * GET	    /resource_name	                index	orders.index
+ * GET	    /orders/create	        create	orders.create
+ * POST	    /orders	                store	orders.store
+ * GET	    /orders/{order}	        show	orders.show
+ * GET	    /orders/{order}/edit	edit	orders.edit
+ * PUT	    /orders/{order}	        update	orders.update
+ * DELETE	/orders/{order}	        destroy	orders.destroy
+ */
+Route::apiResources([
+    'orders' => 'OrderController',
+    'widgets' => 'WidgetController'
+]);
