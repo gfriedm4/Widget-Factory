@@ -9,9 +9,9 @@ $factory->define(App\Widget::class, function (Faker $faker) {
 
     return [
         'name' => "Product " . rand(1, 500),
-        'widget_types_id' => $widgetType->id,
-        'widget_sizes_id' => $widgetSize->id,
-        'widget_finishes_id' => $widgetFinish->id,
+        'widget_type_id' => $widgetType->id,
+        'widget_size_id' => $widgetSize->id,
+        'widget_finish_id' => $widgetFinish->id,
         'price' => rand(1, 5000) * 100,
         'inventory' => rand(0, 3)
     ];

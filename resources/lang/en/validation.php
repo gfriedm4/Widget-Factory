@@ -101,8 +101,14 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'widget_type_id' => [
+            'exists' => 'Invalid widget type.',
+        ],
+        'widget_size_id' => [
+            'exists' => 'Invalid widget size.',
+        ],
+        'widget_finish_id' => [
+            'exists' => 'Invalid widget finish.',
         ],
     ],
 

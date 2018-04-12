@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Widget;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class WidgetController extends Controller
 {
@@ -14,17 +15,10 @@ class WidgetController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $widgets = Widget::query()
+            ->where('inventory', '>', 0)
+            ->with(['widgetSize', 'widgetType', 'widgetFinish']);
+        return $widgets->paginate();
     }
 
     /**
@@ -35,29 +29,30 @@ class WidgetController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $widget = new Widget;
+
+        $validate = Validator::make($request->all(), $widget->getValidations());
+
+        if ($validate->failed()) {
+            return response($validate->errors()->toJson(), 400);
+        }
+
+        $widget->fill($request->all())->save();
+
+        return response()->json($widget, 201);
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \App\Widget  $widget
-     * @return \Illuminate\Http\Response
+     * @return Widget
      */
     public function show(Widget $widget)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Widget  $widget
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Widget $widget)
-    {
-        //
+        return $widget
+            ->with(['widgetSize', 'widgetType', 'widgetFinish'])
+            ->first();
     }
 
     /**
@@ -69,7 +64,15 @@ class WidgetController extends Controller
      */
     public function update(Request $request, Widget $widget)
     {
-        //
+        $validate = Validator::make($request->all(), $widget->getValidations());
+
+        if ($validate->failed()) {
+            return response($validate->errors()->toJson(), 400);
+        }
+
+        $widget->fill($request->all())->save();
+
+        return response()->json($widget);
     }
 
     /**
@@ -80,6 +83,8 @@ class WidgetController extends Controller
      */
     public function destroy(Widget $widget)
     {
-        //
+        $widget->delete();
+
+        return response()->json(null, 204);
     }
 }
