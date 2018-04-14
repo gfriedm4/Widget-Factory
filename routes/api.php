@@ -17,6 +17,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('widgets/all', function() {
+    return \App\Widget::all()
+        ->where('inventory', '>', 0)
+        ->pluck('name', 'id');
+});
+
 /*
  * GET	    /resource_name	                index	orders.index
  * GET	    /orders/create	        create	orders.create
@@ -28,5 +34,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
  */
 Route::apiResources([
     'orders' => 'OrderController',
-    'widgets' => 'WidgetController'
+    'widgets' => 'WidgetController',
+    'types' => 'WidgetTypeController',
+    'sizes' => 'WidgetSizeController',
+    'finishes' => 'WidgetFinishController'
 ]);

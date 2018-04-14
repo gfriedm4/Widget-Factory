@@ -16,6 +16,7 @@ class Order extends Model
         'name' => 'required|max:255',
         'address' => 'required|max:255',
         'email' => 'required|email',
+        'widgets' => 'required|exists:widgets,id',
     ];
 
     public function getValidations() {

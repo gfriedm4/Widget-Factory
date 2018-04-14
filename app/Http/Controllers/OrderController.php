@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Order;
+use App\Widget;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -34,11 +35,35 @@ class OrderController extends Controller
 
         $validate = Validator::make($request->all(), $order->getValidations());
 
-        if ($validate->failed()) {
+        $widgets = $request->get('widgets');
+        $fails = false;
+
+        // Validate inventory amount for each widget in the order
+        foreach ($widgets as $widget_id => $widget) {
+            $widgetModel = Widget::findOrFail($widget_id);
+            if ($widgetModel->inventory < $widget['quantity']) {
+                return response([
+                    'errors' => [
+                        'widgets' => 'Not enough inventory for ' . $widgetModel->name . '.'
+                    ]
+                ], 400);
+            }
+        }
+
+        if ($validate->fails() || $fails) {
             return response($validate->errors()->toJson(), 400);
         }
 
         $order->fill($request->all())->save();
+
+        // Remove the inventory from each widget
+        foreach ($widgets as $widget_id => $widget) {
+            $widgetModel = Widget::findOrFail($widget_id);
+            $widgetModel->inventory -= $widget['quantity'];
+            $widgetModel->save();
+        }
+
+        $order->widgets()->sync($request->get('widgets'));
 
         return response()->json($order, 201);
     }
@@ -67,7 +92,7 @@ class OrderController extends Controller
     {
         $validate = Validator::make($request->all(), $order->getValidations());
 
-        if ($validate->failed()) {
+        if ($validate->fails()) {
             return response($validate->errors()->toJson(), 400);
         }
 
