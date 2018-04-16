@@ -8,7 +8,7 @@ $factory->define(App\Widget::class, function (Faker $faker) {
     $widgetFinish = App\WidgetFinish::query()->inRandomOrder()->limit(1)->first();
 
     return [
-        'name' => "Product " . rand(1, 500),
+        'name' => $faker->word,
         'widget_type_id' => $widgetType->id,
         'widget_size_id' => $widgetSize->id,
         'widget_finish_id' => $widgetFinish->id,

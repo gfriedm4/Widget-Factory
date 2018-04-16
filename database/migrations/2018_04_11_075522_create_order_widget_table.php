@@ -31,8 +31,8 @@ class CreateOrderWidgetTable extends Migration
      */
     public function down()
     {
-        Schema::table('order_widget', function (Blueprint $table) {
-            //
-        });
+        Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('order_widget');
+        Schema::enableForeignKeyConstraints();
     }
 }

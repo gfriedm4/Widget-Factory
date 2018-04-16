@@ -27,6 +27,8 @@ class CreateWidgetTypesTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('widget_types');
+        Schema::enableForeignKeyConstraints();
     }
 }

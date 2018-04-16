@@ -28,6 +28,8 @@ class CreateWidgetSizesTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('widget_sizes');
+        Schema::enableForeignKeyConstraints();
     }
 }
