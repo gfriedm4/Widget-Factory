@@ -6,9 +6,11 @@ use App\Order;
 use App\Widget;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Kyslik\ColumnSortable\Sortable;
 
 class OrderController extends Controller
 {
+    use Sortable;
     /**
      * Display a listing of the resource.
      *
@@ -16,11 +18,29 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::query()
-            ->with(['widgets' => function($query) {
-                $query->select('widgets.id', 'widgets.name');
-            }]);
-        return $orders->paginate();
+        $orders = Order::query();
+
+        $params = request()->all();
+        $paramsKeys = array_keys($params);
+
+        // Handle all searchable fields the same
+        $searchableFields = ['name', 'address', 'email'];
+        if (count($params)) {
+            foreach ($paramsKeys as $paramKey) {
+                if (in_array($paramKey, $searchableFields)) {
+                    $value = $params[$paramKey];
+                    if ($value) {
+                        $orders->where($paramKey, 'LIKE', '%' . $value . '%');
+                    }
+                }
+            }
+        }
+
+        $orders->with(['widgets' => function($query) {
+            $query->select('widgets.id', 'widgets.name');
+        }]);
+
+        return $orders->sortable(['updated_at', 'asc'])->paginate();
     }
 
     /**

@@ -2,10 +2,14 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Kyslik\ColumnSortable\Sortable;
 
 class Widget extends Model
 {
+    use Sortable;
+
     protected $fillable = [
         'name',
         'widget_type_id',
@@ -33,19 +37,79 @@ class Widget extends Model
         'inventory' => 'required|integer|min:0',
     ];
 
+    public $sortable = [
+        'name',
+        'widget_type_id',
+        'widget_finish_id',
+        'widget_size_id',
+        'price',
+        'inventory',
+        'created_at',
+        'updated_at',
+    ];
+
+    public function price() {
+        return $this->price / 100;
+    }
+
+    /**
+     * @return array
+     */
     public function getValidations() {
         return $this->validations;
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function widgetType() {
         return $this->belongsTo('App\WidgetType');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function widgetSize() {
         return $this->belongsTo('App\WidgetSize');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function widgetFinish() {
         return $this->belongsTo('App\WidgetFinish');
+    }
+
+    /**
+     * @param Builder $query
+     * @param $direction
+     * @return mixed
+     */
+    public function widgetTypeSortable($query, $direction) {
+        return $query->join('widget_types', 'widgets.widget_type_id', '=', 'widget_types.id')
+            ->orderBy('widget_types.type', $direction)
+            ->select('widgets.*');
+    }
+
+    /**
+     * @param Builder $query
+     * @param $direction
+     * @return mixed
+     */
+    public function widgetFinishSortable($query, $direction) {
+        return $query->join('widget_finishes', 'widgets.widget_finish_id', '=', 'widget_finishes.id')
+            ->orderBy('widget_finishes.finish', $direction)
+            ->select('widgets.*');
+    }
+
+    /**
+     * @param Builder $query
+     * @param $direction
+     * @return mixed
+     */
+    public function widgetSizeSortable($query, $direction) {
+        return $query->join('widget_sizes', 'widgets.widget_size_id', '=', 'widget_sizes.id')
+            ->orderBy('widget_sizes.value', $direction)
+            ->select('widgets.*');
     }
 }

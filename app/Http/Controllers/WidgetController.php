@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Widget;
+use App\WidgetFinish;
+use App\WidgetSize;
+use App\WidgetType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,9 +19,50 @@ class WidgetController extends Controller
     public function index()
     {
         $widgets = Widget::query()
-            ->where('inventory', '>', 0)
-            ->with(['widgetSize', 'widgetType', 'widgetFinish']);
-        return $widgets->paginate();
+            ->where('inventory', '>', 0);
+
+        // Implement filtering logic by size, type, and finish
+        // Implement search logic by name
+        $params = request()->all();
+        $paramsKeys = array_keys($params);
+        if (count($params)) {
+            if (in_array('widgetSize', $paramsKeys)) {
+                $size = $params['widgetSize'];
+                if ($size && is_numeric($size) && WidgetSize::findOrFail($size)) {
+                    $widgets->whereHas('widgetSize', function ($query) use ($size) {
+                        $query->where('id', '=', $size);
+                    });
+                }
+            }
+
+            if (in_array('widgetType', $paramsKeys)) {
+                $type = $params['widgetType'];
+                if ($type && is_numeric($type) && WidgetType::findOrFail($type)) {
+                    $widgets->whereHas('widgetType', function ($query) use ($type) {
+                        $query->where('id', '=', $type);
+                    });
+                }
+            }
+
+            if (in_array('widgetFinish', $paramsKeys)) {
+                $finish = $params['widgetFinish'];
+                if ($finish && is_numeric($finish) && WidgetFinish::findOrFail($finish)) {
+                    $widgets->whereHas('widgetFinish', function ($query) use ($finish) {
+                        $query->where('id', '=', $finish);
+                    });
+                }
+            }
+
+            if (in_array('name', $paramsKeys)) {
+                $name = $params['name'];
+                if ($name) {
+                    $widgets->where('name', 'LIKE', '%' . $name . '%');
+                }
+            }
+        }
+
+        $widgets->with(['widgetSize', 'widgetType', 'widgetFinish']);
+        return $widgets->sortable(['name'])->paginate();
     }
 
     /**

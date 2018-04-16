@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Kyslik\ColumnSortable\Sortable;
 
 class Order extends Model
 {
+    use Sortable;
+
     protected $fillable = [
         'name',
         'address',
@@ -17,6 +20,14 @@ class Order extends Model
         'address' => 'required|max:255',
         'email' => 'required|email',
         'widgets' => 'required|exists:widgets,id',
+    ];
+
+    public $sortable = [
+        'name',
+        'address',
+        'email',
+        'created_at',
+        'updated_at',
     ];
 
     public function getValidations() {
