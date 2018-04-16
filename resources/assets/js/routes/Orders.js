@@ -37,12 +37,22 @@ export default class Orders extends Component {
 			})
 		}];
 
+		const { state } = this.props.location;
+
 		return (
-			<ResourceTable
-				api={'/api/orders'}
-				columns={columns}
-				tableType="order"
-			/>
+			<div>
+				{ state && state.orderSuccess &&
+				<div className="alert alert-success alert-dismissible">
+					<span>Successfully created order!</span>
+				</div>
+				}
+				<ResourceTable
+					api={'/api/orders'}
+					columns={columns}
+					tableType="order"
+					noDataIndication="No Orders Found"
+				/>
+			</div>
 		);
 	}
 }

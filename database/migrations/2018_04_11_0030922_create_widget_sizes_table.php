@@ -14,7 +14,8 @@ class CreateWidgetSizesTable extends Migration
     public function up()
     {
         Schema::create('widget_sizes', function (Blueprint $table) {
-            $table->increments('id');
+            $table->primary('id');
+            $table->uuid('id');
             $table->string('size');
             $table->integer('value');
             $table->timestamps();

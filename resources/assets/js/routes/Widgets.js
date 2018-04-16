@@ -90,15 +90,25 @@ export default class Widgets extends Component {
 			));
 		};
 
+		const { state } = this.props.location;
+
 		return (
-			<ResourceTable
-				api={'/api/widgets'}
-				columns={columns}
-				resourceFormatter={resourceFormatter}
-				selectable
-				linkTo="/orders/add"
-				tableType="widget"
-			/>
+			<div>
+				{ state && state.widgetSuccess &&
+					<div className="alert alert-success alert-dismissible">
+						<span>Successfully created widget!</span>
+					</div>
+				}
+				<ResourceTable
+					api={'/api/widgets'}
+					columns={columns}
+					resourceFormatter={resourceFormatter}
+					selectable
+					linkTo="/orders/add"
+					tableType="widget"
+					noDataIndication="No Widgets Found"
+				/>
+			</div>
 		);
 	}
 }

@@ -5,7 +5,6 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import filterFactory from 'react-bootstrap-table2-filter';
 import ReactModal from 'react-modal';
-import WidgetForm from "../forms/WidgetForm";
 import OrderForm from "../forms/OrderForm";
 
 ReactModal.setAppElement('#root');
@@ -95,7 +94,8 @@ export default class ResourceTable extends Component {
 					selectedItems[row.id] = {
 						value: row.id,
 						label: row.name,
-						quantity: 1
+						quantity: 1,
+						inventory: row.inventory
 					};
 					selectedRows = [...this.state.selectedRows, row.id];
 				}
@@ -138,10 +138,10 @@ export default class ResourceTable extends Component {
 						{
 							tableType == 'widget' &&
 							<button
-								className="fa fa-plus"
+								className="btn btn-success"
 								onClick={this.handleOpenModal}
 							>
-								Add to order
+								<span className="fa fa-plus">Add to order</span>
 							</button>
 						}
 
@@ -149,6 +149,7 @@ export default class ResourceTable extends Component {
 				</div>
 				<div className="row">
 					<BootstrapTable
+						noDataIndication={this.props.noDataIndication}
 						classes="resource-table"
 						keyField='id'
 						data={resources}

@@ -5,3 +5,13 @@
     }
   }
 }
+
+.pagination {
+  .page-item {
+    .page-link {
+      // For some reason, the bootstrap-tables library
+      // sets this to 1, which messes with our modal
+      z-index: 0;
+    }
+  }
+}

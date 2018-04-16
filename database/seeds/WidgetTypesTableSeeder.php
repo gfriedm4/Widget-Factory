@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use \Webpatser\Uuid\Uuid;
 
 class WidgetTypesTableSeeder extends Seeder
 {
@@ -23,6 +24,7 @@ class WidgetTypesTableSeeder extends Seeder
 
         foreach ($types as $type) {
             DB::table('widget_types')->insert([
+                'id' => Uuid::generate()->string,
                 'type' => $type,
                 'created_at' => $time,
                 'updated_at' => $time

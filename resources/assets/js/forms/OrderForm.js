@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { RingLoader } from 'react-spinners';
-import Select from 'react-select';
+import { Redirect } from 'react-router-dom';
 
 class OrderForm extends Component {
 	constructor(props) {
@@ -14,6 +13,8 @@ class OrderForm extends Component {
 				address: this.props.address || "",
 				widgets: this.props.widgets || {}
 			},
+			error: false,
+			orderSuccess: false
 		};
 
 		this.handleChange = this.handleChange.bind(this);
@@ -53,6 +54,7 @@ class OrderForm extends Component {
 		for (let key in widgets) {
 			delete widgets[key]['value'];
 			delete widgets[key]['label'];
+			delete widgets[key]['inventory'];
 			widgets[key]['quantity'] = parseInt(widgets[key]['quantity']);
 		}
 
@@ -63,105 +65,157 @@ class OrderForm extends Component {
 			widgets: widgets
 		})
 			.then(response => {
-				console.log(response);
+				this.setState({
+					error: false,
+					orderSuccess: true
+				})
 			})
 			.catch(error => {
-				console.log(error.response);
+				const response = JSON.parse(error.response.request.response);
+				console.log(response);
+				this.setState({
+					errors: response
+				});
 			});
 	}
 
 	render() {
-		const { fields } = this.state;
+		const { fields, errors, orderSuccess } = this.state;
 
-		return <div className="container">
-			<h2>Create an Order</h2>
-			<form onSubmit={this.handleSubmit}>
-				<div className="form-row justify-content-center">
-					<div className="form-group col-md-6">
-						<label htmlFor="name">Name</label>
-						<input
-							type="text"
-							onChange={this.handleChange}
-							name="name"
-							id="name"
-							value={fields.name}
-							className="form-control"
-							required
-						/>
+		if (orderSuccess) {
+			return (
+				<Redirect to={{
+					pathname: '/orders',
+					state: { orderSuccess: true }
+				}}/>
+			)
+		}
+
+		return (
+			<div className="container">
+				<form onSubmit={this.handleSubmit}>
+					<div className="form-row justify-content-center">
+						<div className="form-group col-md-6">
+							<h2>Create an Order</h2>
+						</div>
 					</div>
-				</div>
-				<div className="form-row justify-content-center">
-					<div className="form-group col-md-6">
-						<label htmlFor="email">Email Address</label>
-						<input
-							type="email"
-							onChange={this.handleChange}
-							name="email"
-							id="email"
-							value={fields.email}
-							className="form-control"
-							required
-						/>
+					<div className="form-row justify-content-center">
+						<div className="form-group col-md-6">
+							<label htmlFor="name">Name</label>
+							<input
+								type="text"
+								onChange={this.handleChange}
+								name="name"
+								id="name"
+								value={fields.name}
+								className="form-control"
+								required
+							/>
+							{
+								errors &&
+								errors.name &&
+								<span className="text-danger">{errors.name[0]}</span>
+							}
+						</div>
 					</div>
-				</div>
-				<div className="form-row justify-content-center">
-					<div className="form-group col-md-6">
-						<label htmlFor="address">Address</label>
-						<input
-							type="text"
-							onChange={this.handleChange}
-							name="address"
-							id="address"
-							value={fields.address}
-							className="form-control"
-							required
-						/>
+					<div className="form-row justify-content-center">
+						<div className="form-group col-md-6">
+							<label htmlFor="email">Email Address</label>
+							<input
+								type="email"
+								onChange={this.handleChange}
+								name="email"
+								id="email"
+								value={fields.email}
+								className="form-control"
+								required
+							/>
+							{
+								errors &&
+								errors.email &&
+								<span className="text-danger">{errors.email[0]}</span>
+							}
+						</div>
 					</div>
-				</div>
-				<div className="form-row justify-content-center">
-					<div className="form-group col-md-6">
-						<label htmlFor="widgets">Widgets</label>
-						{
-							Object.keys(fields.widgets).map(widgetId => {
-								const widget = fields.widgets[widgetId];
-								return (
-									<div className="row" key={widget.value}>
-										<div className="col-md-8">
-											<div className="row">
-												<strong className="col-md-2">Name</strong>
-												<span className="col-md-10">{widget.label}</span>
+					<div className="form-row justify-content-center">
+						<div className="form-group col-md-6">
+							<label htmlFor="address">Address</label>
+							<input
+								type="text"
+								onChange={this.handleChange}
+								name="address"
+								id="address"
+								value={fields.address}
+								className="form-control"
+								required
+							/>
+							{
+								errors &&
+								errors.address &&
+								<span className="text-danger">{errors.address[0]}</span>
+							}
+						</div>
+					</div>
+					<div className="form-row justify-content-center">
+						<div className="form-group col-md-6">
+							<label htmlFor="widgets">Widgets</label>
+							{
+								Object.keys(fields.widgets).map(widgetId => {
+									const widget = fields.widgets[widgetId];
+									return (
+										<div className="row" key={widget.value}>
+											<div className="col-md-8">
+												<div className="row">
+													<strong className="col-md-2">Name</strong>
+													<span className="col-md-10">{widget.label}</span>
+												</div>
+											</div>
+											<div className="col-md-4">
+												<div className="row">
+													<strong className="col-md-8">Quantity</strong>
+													<input
+														name="quantity"
+														className="col-md-4"
+														data-id={widget.value}
+														type="number"
+														min={1}
+														max={widget.inventory}
+														value={widget.quantity}
+														onChange={this.handleQuantityChange}
+														className="form-control"
+														required
+													/>
+												</div>
 											</div>
 										</div>
-										<div className="col-md-4">
-											<div className="row">
-												<strong className="col-md-8">Quantity</strong>
-												<input
-													name="quantity"
-													className="col-md-4"
-													data-id={widget.value}
-													type="number"
-													value={widget.quantity}
-													onChange={this.handleQuantityChange}
-												/>
-											</div>
-										</div>
-									</div>
-								);
-							})
-						}
+									);
+								})
+							}
+							{
+								errors &&
+								errors.widgets &&
+								<span className="text-danger">{errors.widgets[0]}</span>
+							}
+							{
+								errors &&
+								errors.errors &&
+								errors.errors.widgets &&
+								<span className="text-danger">{errors.errors.widgets}</span>
+							}
+						</div>
 					</div>
-				</div>
-				<div className="form-row justify-content-center">
-					<div className="form-group col-md-6">
-						<input
-							className="btn btn-success"
-							type="submit"
-							value="Submit"
-						/>
+					<div className="form-row justify-content-center">
+						<div className="form-group col-md-6">
+							<input
+								className="btn btn-success"
+								type="submit"
+								value="Submit"
+							/>
+						</div>
 					</div>
-				</div>
-			</form>
-		</div>
+				</form>
+			</div>
+		);
 	}
 }
 

@@ -14,7 +14,8 @@ class CreateWidgetFinishesTable extends Migration
     public function up()
     {
         Schema::create('widget_finishes', function (Blueprint $table) {
-            $table->increments('id');
+            $table->primary('id');
+            $table->uuid('id');
             $table->string('finish');
             $table->timestamps();
         });

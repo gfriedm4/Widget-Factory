@@ -3,10 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Kyslik\ColumnSortable\Sortable;
 
-class Widget extends Model
+class Widget extends WidgetModel
 {
     use Sortable;
 

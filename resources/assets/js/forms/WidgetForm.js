@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { RingLoader } from 'react-spinners';
+import { Redirect } from 'react-router-dom';
 
 class WidgetForm extends Component {
 	constructor(props) {
@@ -18,6 +19,8 @@ class WidgetForm extends Component {
 			types: null,
 			sizes: null,
 			finishes: null,
+			widgetSuccess: false,
+			errors: false
 		};
 
 		this.handleChange = this.handleChange.bind(this);
@@ -38,11 +41,12 @@ class WidgetForm extends Component {
 				const fields = {
 					...this.state.fields,
 					// Take from prop or the first item in array
-					type: type || types.data[Object.keys(types.data)[0]],
-					size: size || sizes.data[Object.keys(sizes.data)[0]],
-					finish: finish || finishes.data[Object.keys(finishes.data)[0]],
+					type: type || Object.keys(types.data)[0],
+					size: size || Object.keys(sizes.data)[0],
+					finish: finish || Object.keys(finishes.data)[0],
 				};
 
+				console.log(fields);
 				this.setState({
 					types: types.data,
 					sizes: sizes.data,
@@ -76,17 +80,30 @@ class WidgetForm extends Component {
 			price: fields.price
 		})
 			.then(response => {
-				console.log(response);
+				this.setState({
+					widgetSuccess: true
+				})
 			})
 			.catch(error => {
-				console.log(error);
+				this.setState({
+					errors: error.response
+				})
 			});
 	}
 
 	render() {
-		const { types, sizes, finishes, fields } = this.state;
+		const { types, sizes, finishes, fields, widgetSuccess } = this.state;
 		if (!types && !sizes && !finishes) {
 			return <RingLoader/>;
+		}
+
+		if (widgetSuccess) {
+			return (
+				<Redirect to={{
+					pathname: '/widgets',
+					state: { widgetSuccess: true }
+				}}/>
+			)
 		}
 
 		return <div className="container">

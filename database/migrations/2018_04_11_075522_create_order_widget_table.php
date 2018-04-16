@@ -15,9 +15,9 @@ class CreateOrderWidgetTable extends Migration
     {
         Schema::create('order_widget', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('widget_id');
+            $table->uuid('widget_id');
             $table->foreign('widget_id')->references('id')->on('widgets');
-            $table->unsignedInteger('order_id');
+            $table->uuid('order_id');
             $table->foreign('order_id')->references('id')->on('orders');
             $table->integer('quantity');
             $table->timestamps();

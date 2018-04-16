@@ -14,7 +14,8 @@ class CreateWidgetTypesTable extends Migration
     public function up()
     {
         Schema::create('widget_types', function (Blueprint $table) {
-            $table->increments('id');
+            $table->primary('id');
+            $table->uuid('id');
             $table->string('type');
             $table->timestamps();
         });

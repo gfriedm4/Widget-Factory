@@ -2,10 +2,9 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Kyslik\ColumnSortable\Sortable;
 
-class Order extends Model
+class Order extends WidgetModel
 {
     use Sortable;
 
@@ -19,7 +18,7 @@ class Order extends Model
         'name' => 'required|max:255',
         'address' => 'required|max:255',
         'email' => 'required|email',
-        'widgets' => 'required|exists:widgets,id',
+        'widgets' => 'required',
     ];
 
     public $sortable = [

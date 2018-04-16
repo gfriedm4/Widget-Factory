@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class WidgetSize extends Model
+class WidgetSize extends WidgetModel
 {
     protected $hidden = ['updated_at', 'created_at'];
 
