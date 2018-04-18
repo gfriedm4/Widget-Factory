@@ -34,7 +34,6 @@ class Order extends WidgetModel
     }
 
     public function widgets() {
-        return $this->belongsToMany('App\Widget')
-            ->where('order_widget.quantity', '>', 0);
+        return $this->belongsToMany('App\Widget')->withPivot('quantity');
     }
 }

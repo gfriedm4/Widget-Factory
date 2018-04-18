@@ -58,6 +58,7 @@ class OrderForm extends Component {
 			widgets[key]['quantity'] = parseInt(widgets[key]['quantity']);
 		}
 
+		console.log(widgets);
 		axios.post('/api/orders', {
 			name: fields.name,
 			email: fields.email,

@@ -1,4 +1,12 @@
 .resource-table {
+  .small-column {
+    width: 100px;
+  }
+
+  th[data-row-selection] {
+    width: 40px;
+  }
+
   tr {
     &:hover {
       cursor: pointer;
@@ -6,12 +14,19 @@
   }
 }
 
-.pagination {
-  .page-item {
-    .page-link {
-      // For some reason, the bootstrap-tables library
-      // sets this to 1, which messes with our modal
-      z-index: 0;
+.react-bootstrap-table-pagination {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+
+  .pagination {
+    .page-item {
+      .page-link {
+        // For some reason, the bootstrap-tables library
+        // sets this to 1, which messes with our modal
+        z-index: 0;
+        box-shadow: none;
+      }
     }
   }
 }

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import ResourceTable from '../components/ResourceTable';
 import { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
 import axios from "axios";
-import { RingLoader } from 'react-spinners';
+import { PacmanLoader } from 'react-spinners';
 
 export default class Widgets extends Component {
 	constructor(props) {
@@ -35,7 +35,11 @@ export default class Widgets extends Component {
 	render() {
 		const { finishes, types, sizes } = this.state;
 		if (finishes === null || types === null || sizes === null) {
-			return <RingLoader/>;
+			return (
+				<div className="spinner">
+					<PacmanLoader />
+				</div>
+			);
 		}
 		console.log(finishes);
 		const columns = [{
@@ -69,11 +73,13 @@ export default class Widgets extends Component {
 		{
 			dataField: 'inventory',
 			text: 'Inventory',
+			headerClasses: 'small-column'
 		},
 		{
 			dataField: 'price',
 			text: 'Price',
 			sort: true,
+			headerClasses: 'small-column'
 		}];
 
 		const resourceFormatter = (widgets) => {
@@ -85,9 +91,39 @@ export default class Widgets extends Component {
 					widgetSize: widget.widget_size.size,
 					widgetFinish: widget.widget_finish.finish,
 					inventory: widget.inventory,
-					price: widget.price
+					price: "$" + (widget.price  / 100).toFixed(2)
 				}
 			));
+		};
+
+		const selectRow = {
+			mode: 'checkbox',
+			clickToSelect: true,
+			bgColor: '#6C6EA0',
+			style: { color: '#FFFFFF' },
+			selected: this.state.selectedRows,
+			onSelect: (row, isSelect, rowIndex) => {
+				const { selectedItems } = this.state;
+				let selectedRows;
+				if (isSelect) {
+					selectedItems[row.id] = {
+						value: row.id,
+						label: row.name,
+						quantity: 1,
+						inventory: row.inventory
+					};
+					selectedRows = [...this.state.selectedRows, row.id];
+				}
+				else {
+					delete selectedItems[row.id];
+					selectedRows = this.state.selectedRows.filter(x => x !== row.id);
+				}
+
+				this.setState({
+					selectedItems: selectedItems,
+					selectedRows: selectedRows
+				});
+			}
 		};
 
 		const { state } = this.props.location;

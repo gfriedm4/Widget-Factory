@@ -1,0 +1,21 @@
+$primary:                     #6C6EA0;
+$secondary:                   #FF1053;
+$info:                        #66C7F4;
+$light:                       #FFFFFF;
+$dark:                        #414A4C;
+$black:                       $dark;
+
+$table-bg:                    rgba($primary, .075);
+$table-accent-bg:             rgba($primary, .05);
+$table-hover-bg:              rgba($primary, .33);
+$table-active-bg:             $table-hover-bg;
+$table-border-color:          rgba($primary, .5);
+
+$table-head-bg:               $primary;
+$table-head-color:            $light;
+$table-striped-order:         even;
+
+$btn-box-shadow:              none;
+$btn-focus-box-shadow:        none;
+$btn-active-box-shadow:       none;
+$btn-padding-x:               1rem;

@@ -16,9 +16,9 @@ class CreateOrderWidgetTable extends Migration
         Schema::create('order_widget', function (Blueprint $table) {
             $table->increments('id');
             $table->uuid('widget_id');
-            $table->foreign('widget_id')->references('id')->on('widgets');
+            $table->foreign('widget_id')->references('id')->on('widgets')->onDelete('cascade');
             $table->uuid('order_id');
-            $table->foreign('order_id')->references('id')->on('orders');
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->integer('quantity');
             $table->timestamps();
         });

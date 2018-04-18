@@ -18,9 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('widgets/all', function() {
-    return \App\Widget::all()
-        ->where('inventory', '>', 0)
-        ->pluck('name', 'id');
+    return \App\Widget::all()->pluck('name', 'id');
 });
 
 /*

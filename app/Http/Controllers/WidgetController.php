@@ -28,7 +28,7 @@ class WidgetController extends Controller
         if (count($params)) {
             if (in_array('widgetSize', $paramsKeys)) {
                 $size = $params['widgetSize'];
-                if ($size && is_numeric($size) && WidgetSize::findOrFail($size)) {
+                if ($size && WidgetSize::findOrFail($size)) {
                     $widgets->whereHas('widgetSize', function ($query) use ($size) {
                         $query->where('id', '=', $size);
                     });
@@ -37,7 +37,7 @@ class WidgetController extends Controller
 
             if (in_array('widgetType', $paramsKeys)) {
                 $type = $params['widgetType'];
-                if ($type && is_numeric($type) && WidgetType::findOrFail($type)) {
+                if ($type && WidgetType::findOrFail($type)) {
                     $widgets->whereHas('widgetType', function ($query) use ($type) {
                         $query->where('id', '=', $type);
                     });
@@ -46,7 +46,7 @@ class WidgetController extends Controller
 
             if (in_array('widgetFinish', $paramsKeys)) {
                 $finish = $params['widgetFinish'];
-                if ($finish && is_numeric($finish) && WidgetFinish::findOrFail($finish)) {
+                if ($finish && WidgetFinish::findOrFail($finish)) {
                     $widgets->whereHas('widgetFinish', function ($query) use ($finish) {
                         $query->where('id', '=', $finish);
                     });

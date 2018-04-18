@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { RingLoader } from 'react-spinners';
+import { PacmanLoader } from 'react-spinners';
 import { Redirect } from 'react-router-dom';
 
 class WidgetForm extends Component {
@@ -77,7 +77,7 @@ class WidgetForm extends Component {
 			widget_size_id: fields.size,
 			widget_finish_id: fields.finish,
 			inventory: fields.inventory,
-			price: fields.price
+			price: fields.price * 100
 		})
 			.then(response => {
 				this.setState({
@@ -94,7 +94,11 @@ class WidgetForm extends Component {
 	render() {
 		const { types, sizes, finishes, fields, widgetSuccess } = this.state;
 		if (!types && !sizes && !finishes) {
-			return <RingLoader/>;
+			return (
+				<div className="spinner">
+					<PacmanLoader />
+				</div>
+			);
 		}
 
 		if (widgetSuccess) {

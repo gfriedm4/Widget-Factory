@@ -24,7 +24,7 @@ class OrderController extends Controller
         $paramsKeys = array_keys($params);
 
         // Handle all searchable fields the same
-        $searchableFields = ['name', 'address', 'email'];
+        $searchableFields = ['id', 'name', 'address', 'email'];
         if (count($params)) {
             foreach ($paramsKeys as $paramKey) {
                 if (in_array($paramKey, $searchableFields)) {
@@ -37,7 +37,7 @@ class OrderController extends Controller
         }
 
         $orders->with(['widgets' => function($query) {
-            $query->select('widgets.id', 'widgets.name');
+            $query->select('widgets.id', 'widgets.name', 'order_widget.quantity');
         }]);
 
         return $orders->sortable(['updated_at', 'asc'])->paginate();
@@ -59,16 +59,26 @@ class OrderController extends Controller
         $fails = false;
 
         // Validate inventory amount for each widget in the order
-        foreach ($widgets as $widget_id => $widget) {
-            $widgetModel = Widget::findOrFail($widget_id);
-            if ($widgetModel->inventory < $widget['quantity']) {
-                return response([
-                    'errors' => [
-                        'widgets' => 'Not enough inventory for ' . $widgetModel->name . '.'
-                    ]
-                ], 400);
+        if (!empty($widgets)) {
+            foreach ($widgets as $widget_id => $widget) {
+                $widgetModel = Widget::findOrFail($widget_id);
+                if ($widgetModel->inventory < $widget['quantity']) {
+                    return response([
+                        'errors' => [
+                            'widgets' => 'Not enough inventory for ' . $widgetModel->name . '.'
+                        ]
+                    ], 400);
+                }
             }
         }
+        else {
+            return response([
+                'errors' => [
+                    'widgets' => 'Widgets should be an object { id: { quantity: x } }'
+                ]
+            ], 400);
+        }
+
 
         if ($validate->fails() || $fails) {
             return response($validate->errors()->toJson(), 400);
@@ -112,9 +122,59 @@ class OrderController extends Controller
     {
         $validate = Validator::make($request->all(), $order->getValidations());
 
-        if ($validate->fails()) {
+        $newWidgets = $request->get('widgets');
+
+        $fails = false;
+
+        if (empty($newWidgets) || !is_array($newWidgets)) {
+            return response([
+                'errors' => [
+                    'widgets' => 'Widgets should be an object { id: { quantity: x } }'
+                ]
+            ], 400);
+        }
+
+        foreach (array_keys($newWidgets) as $newWidgetId) {
+            $widget = Widget::findOrFail($newWidgetId);
+            if (!$widget) {
+                return response([
+                    'errors' => [
+                        'widgets' => 'Widgets does not exist: ' . $newWidgetId
+                    ]
+                ], 400);
+            }
+        }
+
+        if ($validate->fails() || $fails) {
             return response($validate->errors()->toJson(), 400);
         }
+
+        $widgetsToSave = [];
+
+        // Ensure no quantities are going below 0 and save if they all pass
+        foreach ($order->widgets as $currentWidget) {
+            $currentOrderQuantity = $currentWidget->pivot->quantity;
+
+            // In case where we need to update a quantity
+            if (!empty($newWidgets[$currentWidget->id])) {
+                $currentWidget->inventory += ($currentOrderQuantity - $newWidgets[$currentWidget->id]['quantity']);
+            }
+
+            if ($currentWidget->inventory < 0) {
+                return response([
+                    'errors' => [
+                        'widgets' => 'Widget does not have enough inventory:' . $currentWidget->id
+                    ]
+                ], 400);
+            }
+            $widgetsToSave[] = $currentWidget;
+        }
+
+        foreach ($widgetsToSave as $widget) {
+            $widget->save();
+        }
+
+        $order->widgets()->sync($newWidgets);
 
         $order->fill($request->all())->save();
 

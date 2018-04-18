@@ -9,14 +9,16 @@ export default class Orders extends Component {
 
 	render() {
 		const columns = [{
-			dataField: 'id',
-			text: 'ID',
-			hidden: true
-		}, {
 			dataField: 'updated_at',
 			text: 'Order Date',
 			sort: true,
-		}, {
+		},{
+			dataField: 'id',
+			text: 'ID',
+			filter: textFilter({
+				placeholder: 'ID'
+			})
+		},  {
 			dataField: 'name',
 			text: 'Name',
 			sort: true,
@@ -44,6 +46,11 @@ export default class Orders extends Component {
 				{ state && state.orderSuccess &&
 				<div className="alert alert-success alert-dismissible">
 					<span>Successfully created order!</span>
+				</div>
+				}
+				{ state && state.orderDelete &&
+				<div className="alert alert-success alert-dismissible">
+					<span>Successfully deleted order!</span>
 				</div>
 				}
 				<ResourceTable

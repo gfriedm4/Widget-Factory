@@ -37,7 +37,7 @@ export default class Admin extends Component {
 							className="btn btn-success"
 							onClick={this.handleOpenModal}
 						>
-							<span className="fa fa-plus">Add Widget</span>
+							<span className="fa fa-plus"/>Add Widget
 						</button>
 					</div>
 				</div>

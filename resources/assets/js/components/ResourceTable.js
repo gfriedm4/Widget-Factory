@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { RingLoader } from 'react-spinners';
+import { PacmanLoader } from 'react-spinners';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import filterFactory from 'react-bootstrap-table2-filter';
 import ReactModal from 'react-modal';
 import OrderForm from "../forms/OrderForm";
+import Order from "../components/Order";
 
 ReactModal.setAppElement('#root');
 
@@ -26,7 +27,8 @@ export default class ResourceTable extends Component {
 			path: null,
 			selectedItems: {},
 			selectedRows: [],
-			showModal: false
+			showModal: false,
+			selectedOrder: {}
 		};
 
 		this.handleOpenModal = this.handleOpenModal.bind(this);
@@ -79,13 +81,18 @@ export default class ResourceTable extends Component {
 		const { tableType } = this.props;
 
 		if (!resources || resources.length === null) {
-			return <RingLoader />
+			return (
+				<div className="spinner">
+					<PacmanLoader />
+				</div>
+			);
 		}
 
 		const selectRow = {
 			mode: 'checkbox',
 			clickToSelect: true,
-			bgColor: 'whitesmoke',
+			bgColor: '#6C6EA0',
+			style: { color: '#FFFFFF' },
 			selected: this.state.selectedRows,
 			onSelect: (row, isSelect, rowIndex) => {
 				const { selectedItems } = this.state;
@@ -108,6 +115,15 @@ export default class ResourceTable extends Component {
 					selectedItems: selectedItems,
 					selectedRows: selectedRows
 				});
+			}
+		};
+
+		const rowEvents = {
+			onClick: (e, row, rowIndex) => {
+				this.setState({
+					selectedOrder: this.state.resources[rowIndex],
+					showModal: true
+				})
 			}
 		};
 
@@ -141,7 +157,7 @@ export default class ResourceTable extends Component {
 								className="btn btn-success"
 								onClick={this.handleOpenModal}
 							>
-								<span className="fa fa-plus">Add to order</span>
+								<span className="fa fa-plus"/>Add to order
 							</button>
 						}
 
@@ -161,23 +177,32 @@ export default class ResourceTable extends Component {
 							filter: true
 						}}
 						onTableChange={onTableChange}
+						hidePageListOnlyOnePage
 						pagination={paginationFactory({
 							page: this.state.page,
 							sizePerPage: this.state.perPage,
 							totalSize: this.state.total,
-							hideSizePerPage: true
+							hideSizePerPage: true,
+							classNames: "test"
 						})}
 						selectRow={this.props.selectable && selectRow}
+						rowEvents={(!this.props.selectable && rowEvents) || {}}
 						filter={filterFactory()}
 					/>
 					<ReactModal
 						isOpen={this.state.showModal}
 						contentLabel="Form"
+						onRequestClose={this.handleCloseModal}
 					>
-						<button onClick={this.handleCloseModal}>Close</button>
+						<button className="btn btn-primary" onClick={this.handleCloseModal}>Close</button>
 						{ tableType === 'widget' &&
 							<OrderForm
 								widgets={this.state.selectedItems}
+							/>
+						}
+						{ tableType === 'order' &&
+							<Order
+								order={this.state.selectedOrder}
 							/>
 						}
 					</ReactModal>
