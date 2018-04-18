@@ -46,7 +46,6 @@ class WidgetForm extends Component {
 					finish: finish || Object.keys(finishes.data)[0],
 				};
 
-				console.log(fields);
 				this.setState({
 					types: types.data,
 					sizes: sizes.data,

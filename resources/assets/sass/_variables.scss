@@ -1,5 +1,7 @@
 $primary:                     #6C6EA0;
 $secondary:                   #FF1053;
+$danger:                      #FF1053;
+$success:                     #10FFBC;
 $info:                        #66C7F4;
 $light:                       #FFFFFF;
 $dark:                        #414A4C;
@@ -15,7 +17,7 @@ $table-head-bg:               $primary;
 $table-head-color:            $light;
 $table-striped-order:         even;
 
-$btn-box-shadow:              none;
+$btn-box-shadow:              none !important;
 $btn-focus-box-shadow:        none;
 $btn-active-box-shadow:       none;
 $btn-padding-x:               1rem;

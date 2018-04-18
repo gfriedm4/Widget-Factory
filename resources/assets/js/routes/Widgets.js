@@ -41,7 +41,7 @@ export default class Widgets extends Component {
 				</div>
 			);
 		}
-		console.log(finishes);
+
 		const columns = [{
 			dataField: 'id',
 			text: 'ID',
@@ -73,7 +73,8 @@ export default class Widgets extends Component {
 		{
 			dataField: 'inventory',
 			text: 'Inventory',
-			headerClasses: 'small-column'
+			headerClasses: 'small-column',
+			hidden: true
 		},
 		{
 			dataField: 'price',
@@ -143,6 +144,7 @@ export default class Widgets extends Component {
 					linkTo="/orders/add"
 					tableType="widget"
 					noDataIndication="No Widgets Found"
+
 				/>
 			</div>
 		);

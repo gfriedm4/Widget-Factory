@@ -46,9 +46,9 @@ class OrderForm extends Component {
 		})
 	}
 
+	// We need to remove the extra keys the API is not expecting
 	handleSubmit(event) {
 		event.preventDefault();
-
 		const { fields } = this.state;
 		let widgets = JSON.parse(JSON.stringify(fields.widgets));
 		for (let key in widgets) {
@@ -58,7 +58,6 @@ class OrderForm extends Component {
 			widgets[key]['quantity'] = parseInt(widgets[key]['quantity']);
 		}
 
-		console.log(widgets);
 		axios.post('/api/orders', {
 			name: fields.name,
 			email: fields.email,
@@ -73,7 +72,6 @@ class OrderForm extends Component {
 			})
 			.catch(error => {
 				const response = JSON.parse(error.response.request.response);
-				console.log(response);
 				this.setState({
 					errors: response
 				});

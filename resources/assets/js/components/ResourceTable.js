@@ -8,6 +8,7 @@ import ReactModal from 'react-modal';
 import OrderForm from "../forms/OrderForm";
 import Order from "../components/Order";
 
+// Used by ReactModal to hide background app while modal is up
 ReactModal.setAppElement('#root');
 
 export default class ResourceTable extends Component {
@@ -28,7 +29,8 @@ export default class ResourceTable extends Component {
 			selectedItems: {},
 			selectedRows: [],
 			showModal: false,
-			selectedOrder: {}
+			selectedOrder: {},
+			error: null
 		};
 
 		this.handleOpenModal = this.handleOpenModal.bind(this);
@@ -71,7 +73,9 @@ export default class ResourceTable extends Component {
 				});
 			})
 			.catch(error => {
-				console.log(error.response);
+				this.setState({
+					error: error
+				})
 			});
 	}
 
@@ -94,6 +98,8 @@ export default class ResourceTable extends Component {
 			bgColor: '#6C6EA0',
 			style: { color: '#FFFFFF' },
 			selected: this.state.selectedRows,
+
+			// add selected item to state
 			onSelect: (row, isSelect, rowIndex) => {
 				const { selectedItems } = this.state;
 				let selectedRows;
@@ -139,6 +145,7 @@ export default class ResourceTable extends Component {
 
 			const { filters } = newState;
 
+			// Add filters, order, and sort to our url before refreshing
 			if (Object.keys(filters).length) {
 				for (let filter of Object.keys(filters)) {
 					path += "&" + filter + "=" + filters[filter].filterVal;
@@ -160,7 +167,6 @@ export default class ResourceTable extends Component {
 								<span className="fa fa-plus"/>Add to order
 							</button>
 						}
-
 					</div>
 				</div>
 				<div className="row">

@@ -3,6 +3,17 @@
     width: 100px;
   }
 
+  // Did not implement responsive tables, this will do for now
+  td, th {
+    white-space: pre-line;
+    text-overflow: unset;
+    overflow-wrap: break-word;
+  }
+
+  .column-order-date {
+    width: 125px;
+  }
+
   th[data-row-selection] {
     width: 40px;
   }

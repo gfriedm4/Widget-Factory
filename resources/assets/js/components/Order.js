@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Select from 'react-select';
 import { Redirect } from 'react-router-dom';
 import { PacmanLoader } from 'react-spinners';
 
@@ -82,8 +81,6 @@ class Order extends Component {
 				return obj;
 			}, {});
 
-			console.log(widgets);
-
 			axios.put('/api/orders/' + order.id, {
 				name: order.name,
 				email: order.email,
@@ -91,7 +88,6 @@ class Order extends Component {
 				widgets: widgets
 			})
 				.then(response => {
-					console.log(response);
 					this.setState({
 						saved: true,
 						formActive: false,
@@ -99,7 +95,6 @@ class Order extends Component {
 					})
 				})
 				.catch(error => {
-					console.log(error.response);
 					this.setState({
 						saved: false,
 						error: true
@@ -148,6 +143,7 @@ class Order extends Component {
 				})
 			})
 			.catch(error => {
+				const response = JSON.parse(error.response.request.response);
 				this.setState({
 					error: true,
 					modal
@@ -198,8 +194,16 @@ class Order extends Component {
 
 		return (
 			<div className="container">
-				{saved && <div className="alert alert-success">Saved Successfully</div>}
-				{error && <div className="alert alert-danger">There was an error, please try again later.</div>}
+				{saved &&
+					<div className="row justify-content-center">
+						<div className="alert alert-success col-md-6">Saved Successfully</div>
+					</div>
+				}
+				{error &&
+					<div className="row justify-content-center">
+						<div className="alert alert-danger col-md-6">There was an error with your submission.</div>
+					</div>
+				}
 				<div className="row justify-content-center">
 					<div className="col-md-6">
 						<strong>Name:</strong>
@@ -281,7 +285,10 @@ class Order extends Component {
 											onClick={this.handleRemoveWidget}
 											data-id={orderWidgetIndex}
 											className={!formActive ? 'd-none' : 'col btn btn-danger'}
-										>Remove</button>
+										>
+											<span className="fa fa-remove" />
+											<span>Remove</span>
+										</button>
 									</div>
 								</div>
 							))

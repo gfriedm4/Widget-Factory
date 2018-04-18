@@ -18,7 +18,7 @@ import Admin from "../routes/Admin";
 const App = () => (
 	<HashRouter>
 		<div className="container">
-			<nav className="navbar navbar-expand-lg navbar-light bg-light">
+			<nav className="navbar navbar-expand-lg navbar-dark bg-dark">
 				<Link className="navbar-brand" to="/">Widget Factory</Link>
 				<button
 					className="navbar-toggler"

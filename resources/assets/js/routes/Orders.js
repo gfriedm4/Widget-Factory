@@ -12,6 +12,7 @@ export default class Orders extends Component {
 			dataField: 'updated_at',
 			text: 'Order Date',
 			sort: true,
+			headerClasses: "column-order-date"
 		},{
 			dataField: 'id',
 			text: 'ID',
@@ -36,7 +37,8 @@ export default class Orders extends Component {
 			text: 'Address',
 			filter: textFilter({
 				placeholder: 'Address'
-			})
+			}),
+			hidden: true
 		}];
 
 		const { state } = this.props.location;
