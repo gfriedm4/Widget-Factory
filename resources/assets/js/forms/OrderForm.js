@@ -204,7 +204,7 @@ class OrderForm extends Component {
 						</div>
 					</div>
 					<div className="form-row justify-content-center">
-						<div className="form-group col-md-6">
+						<div className="form-group col-md-6 text-right">
 							<input
 								className="btn btn-success"
 								type="submit"

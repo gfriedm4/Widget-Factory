@@ -193,7 +193,7 @@ class Order extends Component {
 		}
 
 		return (
-			<div className="container">
+			<div className="container widget-order">
 				{saved &&
 					<div className="row justify-content-center">
 						<div className="alert alert-success col-md-6">Saved Successfully</div>
