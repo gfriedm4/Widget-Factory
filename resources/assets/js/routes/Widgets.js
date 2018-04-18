@@ -50,37 +50,42 @@ export default class Widgets extends Component {
 			dataField: 'name',
 			text: 'Name',
 			sort: true,
-			filter: textFilter()
+			filter: textFilter({
+				placeholder: 'Name'
+			})
 		}, {
 			dataField: 'widgetType',
 			text: 'Type',
 			filter: selectFilter({
-				options: types
+				options: types,
+				placeholder: 'Type'
 			})
 		}, {
 			dataField: 'widgetSize',
 			text: 'Size',
 			filter: selectFilter({
-				options: sizes
+				options: sizes,
+				placeholder: 'Size'
 			})
 		}, {
 			dataField: 'widgetFinish',
 			text: 'Finish',
 			filter: selectFilter({
-				options: finishes
+				options: finishes,
+				placeholder: 'Finish'
 			})
 		},
 		{
 			dataField: 'inventory',
 			text: 'Inventory',
-			headerClasses: 'small-column',
-			hidden: true
+			headerClasses: 'small-column'
 		},
 		{
 			dataField: 'price',
 			text: 'Price',
 			sort: true,
-			headerClasses: 'small-column'
+			headerClasses: 'small-column',
+			hidden: true
 		}];
 
 		const resourceFormatter = (widgets) => {
