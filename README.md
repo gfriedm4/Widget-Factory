@@ -51,7 +51,7 @@ php artisan db:seed
 * [Laravel](https://laravel.com/) - The web framework used
 * [React](https://reactjs.org/) - Front end library used
 
-##Back End Goals
+## Back End Goals
 1.  [x] Create a relational database (schema and data) to store Widget inventory and orders. 
 2.  [x] Implement a server that will retrieve data from that schema. At a minimum, offer the
 following functionality:
@@ -65,7 +65,7 @@ following functionality:
 Gold finish).
 3. [x] Protect against SQL Injection and Cross-Site Scripting attacks.
 
-##Secondary Back End Goals
+## Secondary Back End Goals
 1. Create an asynchronous backend.
 2. [x] Performance or scalability optimizations.
 3. [x] Create a RESTful API.
@@ -76,7 +76,7 @@ Gold finish).
 option)
 8. Endpoints for adding new categories.
 
-##Front End Goals
+## Front End Goals
 1. [x] A customer should be able to browse Widgets by category.
 2. [x] A customer should be able to search Widgets by size or finish.
 3. [x] A customer should be able to add a Widget to their order.
@@ -86,6 +86,6 @@ entirely.
 6. [x] A page should be available to add new Widgets (eg, making Widget Extreme Edition
 available in Medium size, Gold finish).
 
-##Secondary Front End Goals
+## Secondary Front End Goals
 1. Hierarchical category structure.
 2. Support additional values for existing Widget properties (eg, add a new color or size).
